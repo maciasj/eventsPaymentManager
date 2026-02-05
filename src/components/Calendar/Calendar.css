@@ -1,0 +1,197 @@
+.calendar-container {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-lg);
+    gap: var(--space-md);
+}
+
+.calendar-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex: 1;
+    justify-content: center;
+}
+
+.calendar-title h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    text-transform: capitalize;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.weekday {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    padding: var(--space-sm);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--space-xs);
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: all var(--transition-base);
+    min-height: 80px;
+    /* Ensure height for events */
+    overflow: hidden;
+}
+
+.calendar-day:hover:not(:disabled) {
+    background: var(--color-surface-elevated);
+    transform: scale(1.05);
+}
+
+.calendar-day:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.calendar-day.other-month {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.calendar-day.today {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15));
+}
+
+.calendar-day.selected {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+}
+
+.calendar-day.has-events {
+    font-weight: 600;
+}
+
+.day-number {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--color-text-primary);
+}
+
+.day-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    flex: 1;
+}
+
+/* Updated Event Item Styles for High Visibility */
+.event-item {
+    font-size: 11px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    background: white;
+    margin-bottom: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: #333;
+    width: 100%;
+    text-align: left;
+    z-index: 5;
+    position: relative;
+    border-left: 3px solid #ccc;
+}
+
+.event-item.event-partido {
+    background: #dbeafe;
+    /* Blue 100 */
+    color: #1e40af;
+    /* Blue 800 */
+    border-left-color: #3b82f6;
+}
+
+.event-item.event-concierto {
+    background: #f3e8ff;
+    /* Purple 100 */
+    color: #6b21a8;
+    /* Purple 800 */
+    border-left-color: #a855f7;
+}
+
+.event-item.event-fira {
+    background: #ffedd5;
+    /* Orange 100 */
+    color: #9a3412;
+    /* Orange 800 */
+    border-left-color: #f97316;
+}
+
+.event-name {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.more-events {
+    font-size: 10px;
+    color: var(--color-text-tertiary);
+    font-style: italic;
+    padding: 2px 4px;
+    text-align: right;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .calendar-container {
+        padding: var(--space-md);
+    }
+
+    .calendar-title h2 {
+        font-size: 1rem;
+    }
+
+    .weekday {
+        font-size: 0.75rem;
+        padding: var(--space-xs);
+    }
+
+    .day-number {
+        font-size: 0.75rem;
+    }
+
+    .calendar-day {
+        min-height: 60px;
+        /* Slightly smaller on mobile but still tall */
+    }
+
+    .event-item {
+        font-size: 10px;
+        padding: 2px 4px;
+    }
+}
