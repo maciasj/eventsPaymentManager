@@ -14,6 +14,17 @@ export const isSupabaseConfigured = () => {
     return supabase !== null;
 };
 
+// Test if we can actually reach the database
+export const testConnection = async () => {
+    if (!supabase) return false;
+    try {
+        const { error } = await supabase.from('user_profiles').select('count', { count: 'exact', head: true });
+        return !error;
+    } catch {
+        return false;
+    }
+};
+
 // Simple Auth Operations
 export const verifyUser = async (username, password) => {
     // If Supabase is not configured, implement strict local check instead of bypassing

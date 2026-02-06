@@ -104,7 +104,7 @@ function App() {
             <Calendar events={events} onDayClick={handleDayClick} />
           )}
 
-          {currentView === 'events' && (
+          {currentView === 'list' && (
             <EventList
               events={events}
               onUpdateEvent={handleUpdateEvent}

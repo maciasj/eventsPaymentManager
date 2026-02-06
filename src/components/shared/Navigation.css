@@ -4,136 +4,87 @@
     left: 0;
     right: 0;
     background: var(--color-surface);
-    border-top: 1px solid var(--color-surface-elevated);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-xs);
-    padding: var(--space-sm);
-    padding-bottom: max(var(--space-sm), var(--safe-area-bottom));
-    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-xs) 0;
+    border-top: 1px solid var(--color-bg-tertiary);
     z-index: var(--z-fixed);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.nav-items-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 500px;
 }
 
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-sm);
-    border-radius: var(--radius-md);
-    background: transparent;
-    border: none;
+    gap: 4px;
+    padding: 8px 16px;
     color: var(--color-text-tertiary);
-    cursor: pointer;
-    transition: all var(--transition-base);
-    min-height: 60px;
-    position: relative;
-    overflow: hidden;
-}
-
-.nav-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-    transform: scaleX(0);
-    transition: transform var(--transition-base);
-}
-
-.nav-item:hover {
-    background: var(--color-bg-secondary);
-    color: var(--color-text-secondary);
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 500;
+    flex: 1;
+    transition: all 0.2s;
 }
 
 .nav-item.active {
     color: var(--color-primary);
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
-}
-
-.nav-item.active::before {
-    transform: scaleX(1);
 }
 
 .nav-item svg {
-    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
 }
 
-.nav-item span {
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.sync-status {
-    position: fixed;
-    bottom: calc(80px + var(--safe-area-bottom));
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: var(--z-sticky);
-    pointer-events: none;
-}
-
-.sync-indicator {
+.cloud-status-mini {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: var(--color-surface);
-    border-radius: var(--radius-full);
-    box-shadow: var(--shadow-md);
-    font-size: 0.75rem;
-    font-weight: 600;
-    border: 1px solid var(--color-surface-elevated);
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-tertiary);
+    padding: 2px 8px;
+    margin-top: 2px;
 }
 
-.sync-indicator.online {
+.cloud-status-mini .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+}
+
+.cloud-status-mini.online {
     color: var(--color-success);
 }
 
-.sync-indicator.offline {
-    color: var(--color-warning);
+.cloud-status-mini.online .status-dot {
+    background: var(--color-success);
+    box-shadow: 0 0 4px var(--color-success);
 }
 
-.sync-indicator.syncing {
-    color: var(--color-info);
+.cloud-status-mini.offline,
+.cloud-status-mini.error {
+    color: var(--color-danger);
 }
 
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-    flex-shrink: 0;
-    animation: pulse 2s ease-in-out infinite;
+.cloud-status-mini.offline .status-dot,
+.cloud-status-mini.error .status-dot {
+    background: var(--color-danger);
 }
 
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.5;
-    }
-}
-
-.spinner-small {
-    width: 12px;
-    height: 12px;
-    border: 2px solid var(--color-surface-elevated);
-    border-top-color: currentColor;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    flex-shrink: 0;
-}
-
-/* iOS safe area adjustment */
-@supports (padding: max(0px)) {
+@media (min-width: 640px) {
     .bottom-nav {
-        padding-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
+        padding-bottom: var(--space-md);
     }
 }
