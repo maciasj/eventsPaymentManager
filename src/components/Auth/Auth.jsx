@@ -39,35 +39,33 @@ export const Auth = ({ onLogin }) => {
                     onLogin(user);
                 } else if (isValid === false) {
                     setError('Contraseña incorrecta.');
-                } else {
-                    setError('Usuario no encontrado. ¿Has pulsado en "Regístrate" en el otro móvil?');
+                } else if (isValid === null) {
+                    setError(`El usuario "${user}" no existe en la nube. ¿Te has registrado ya?`);
                 }
             } else {
                 // Register mode
-                // 1. Check if we have connection for registration
                 const conn = await testConnection();
                 if (!conn) {
-                    setError('No hay conexión con la base de datos. Los datos no se guardarán entre dispositivos. Revisa Netlify.');
+                    setError('ERROR: No hay conexión real con Supabase. Revisa las variables en Netlify.');
                     setLoading(false);
                     return;
                 }
 
-                // 2. Check existence
-                const exists = await verifyUser(user, pass);
-                if (exists !== null) {
-                    setError('Ese usuario ya existe. Intenta Iniciar Sesión.');
-                } else {
-                    await createUser(user, pass);
-                    setSuccessMsg('¡Cuenta creada y sincronizada! Entrando...');
+                // Always try cloud registration first to avoid ghost users
+                const success = await createUser(user, pass);
+                if (success) {
+                    setSuccessMsg('¡Usuario creado en la nube! Entrando...');
                     setTimeout(() => {
                         localStorage.setItem('eventManagerUser', user);
                         onLogin(user);
                     }, 1500);
+                } else {
+                    setError('No se pudo crear el usuario en la nube. Revisa el SQL de Supabase.');
                 }
             }
         } catch (err) {
             console.error(err);
-            setError('Error: revisa si has creado las tablas en Supabase.');
+            setError('Error crítico: ' + (err.message || 'Desconocido'));
         } finally {
             setLoading(false);
         }
@@ -79,7 +77,7 @@ export const Auth = ({ onLogin }) => {
                 <div className="auth-header">
                     <h1 className="auth-title">Event Manager</h1>
                     <div className={`auth-status-badge ${isConnected ? 'online' : 'offline'}`}>
-                        {isConnected === null ? '⏳' : (isConnected ? '☁️ Conectado' : '☁️ Solo Offline')}
+                        {isConnected === null ? '⏳' : (isConnected ? '☁️ Sincronizado' : '☁️ Solo Local')}
                     </div>
                 </div>
 
@@ -87,7 +85,7 @@ export const Auth = ({ onLogin }) => {
                     {mode === 'login' ? 'Tus eventos en cualquier lugar' : 'Crea tu cuenta compartida'}
                 </p>
 
-                {error && <div className="auth-alert error">{error}</div>}
+                {error && <div className="auth-alert error" style={{ whiteSpace: 'pre-wrap' }}>{error}</div>}
                 {successMsg && <div className="auth-alert success">{successMsg}</div>}
 
                 <form onSubmit={handleSubmit} className="auth-form">
@@ -117,25 +115,22 @@ export const Auth = ({ onLogin }) => {
                     </div>
 
                     <button type="submit" className="auth-button" disabled={loading}>
-                        {loading ? 'Procesando...' : (mode === 'login' ? 'Entrar' : 'Registrar')}
+                        {loading ? 'Procesando...' : (mode === 'login' ? 'Entrar' : 'Crear Cuenta')}
                     </button>
                 </form>
 
                 <div className="auth-toggle">
                     {mode === 'login' ? (
-                        <p>¿Es tu primera vez? <button onClick={() => setMode('register')}>Regístrate</button></p>
+                        <p>¿No tienes cuenta? <button onClick={() => setMode('register')}>Regístrate</button></p>
                     ) : (
                         <p>¿Ya tienes cuenta? <button onClick={() => setMode('login')}>Inicia Sesión</button></p>
                     )}
                 </div>
             </div>
 
-            {!isConnected && isConnected !== null && (
-                <div className="auth-help-box">
-                    ⚠️ <strong>App en modo local:</strong> Los datos NO se guardarán entre móviles.
-                    Asegúrate de poner las llaves de Supabase en el panel de Netlify.
-                </div>
-            )}
+            <div className="auth-debug-panel" style={{ marginTop: '20px', fontSize: '10px', opacity: 0.5 }}>
+                ID: {import.meta.env.VITE_SUPABASE_URL ? import.meta.env.VITE_SUPABASE_URL.substring(0, 15) : 'MISSING'}...
+            </div>
         </div>
     );
 };

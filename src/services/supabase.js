@@ -103,8 +103,15 @@ export const fetchEvents = async (username) => {
 export const createEvent = async (event) => {
     if (!supabase) return null;
     try {
-        // Remove sync_status for cloud save
-        const { sync_status, ...cloudData } = event;
+        // Prepare clean data for Supabase
+        const { sync_status, id, ...cloudData } = event;
+
+        // Ensure username is present
+        if (!cloudData.username) {
+            console.error('Missing username for event');
+            return null;
+        }
+
         const { data, error } = await supabase
             .from('events')
             .insert([cloudData])
@@ -112,12 +119,13 @@ export const createEvent = async (event) => {
             .single();
 
         if (error) {
-            console.error('Sync error:', error);
-            alert('Error al sincronizar evento: ' + error.message);
+            console.error('Supabase sync error:', error);
+            alert('Error de sincronización: ' + error.message + ' (Detalles: ' + error.details + ')');
             throw error;
         }
         return data;
     } catch (error) {
+        console.error('Critical error creating event:', error);
         throw error;
     }
 };
