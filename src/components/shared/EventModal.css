@@ -142,3 +142,18 @@
 .form-row .form-group {
   margin-bottom: 0;
 }
+
+@media (max-width: 380px) {
+    .event-type-selector {
+        grid-template-columns: 1fr; /* Stack vertically on very small screens */
+    }
+    
+    .event-type-btn {
+        padding: var(--space-sm);
+        font-size: 0.9rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}

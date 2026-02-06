@@ -186,3 +186,32 @@
         font-size: 1rem;
     }
 }
+
+@media (max-width: 480px) {
+    .report-header {
+        /* Keep row layout for navigation */
+        margin-bottom: var(--space-md);
+        gap: var(--space-xs);
+    }
+
+    .report-title {
+        flex-direction: column;
+        /* Stack Title and "This Month" button */
+        gap: 4px;
+    }
+
+    .report-title h2 {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .btn-small {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+        min-height: 28px;
+    }
+
+    .btn-icon {
+        padding: 8px;
+    }
+}

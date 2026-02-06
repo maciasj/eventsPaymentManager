@@ -169,29 +169,49 @@
 /* Responsive adjustments */
 @media (max-width: 640px) {
     .calendar-container {
-        padding: var(--space-md);
+        padding: var(--space-sm);
+    }
+
+    .calendar-header {
+        margin-bottom: var(--space-md);
     }
 
     .calendar-title h2 {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
     .weekday {
-        font-size: 0.75rem;
-        padding: var(--space-xs);
+        font-size: 0.7rem;
+        padding: 2px;
+    }
+
+    .calendar-grid {
+        gap: 2px;
+        /* Tighter grid */
     }
 
     .day-number {
         font-size: 0.75rem;
+        margin-bottom: 2px;
     }
 
     .calendar-day {
-        min-height: 60px;
-        /* Slightly smaller on mobile but still tall */
+        min-height: 50px;
+        /* Reduced specific height */
+        padding: 2px;
+        aspect-ratio: 0.8;
+        /* Allow it to be taller than wide if needed, or just less rigid */
     }
 
     .event-item {
-        font-size: 10px;
-        padding: 2px 4px;
+        font-size: 9px;
+        padding: 1px 3px;
+        margin-bottom: 1px;
+        border-radius: 2px;
+        border-left-width: 2px;
+    }
+
+    .event-name {
+        line-height: 1.1;
     }
 }

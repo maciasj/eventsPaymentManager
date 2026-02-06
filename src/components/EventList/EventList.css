@@ -253,15 +253,53 @@
 
 /* Responsive */
 @media (max-width: 480px) {
+    .event-list-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-sm);
+    }
+
+    .event-list-header h2 {
+        text-align: center;
+    }
+
+    .filter-buttons {
+        justify-content: center;
+        width: 100%;
+        overflow-x: auto;
+        /* Allow scroll if very many filters */
+    }
+
+    .filter-btn {
+        flex: 1;
+        white-space: nowrap;
+    }
+
     .control-group {
         gap: 8px;
+        flex-wrap: wrap;
+        /* Allow wrapping on very small screens */
     }
 
     .input-field input {
         font-size: 0.85rem;
         padding: 6px;
     }
+
+    .card-top-row {
+        gap: var(--space-sm);
+    }
+
+    .event-date-badge {
+        min-width: 44px;
+        padding: 4px 8px;
+    }
+
+    .date-day {
+        font-size: 1rem;
+    }
 }
+
 /* Custom 24h Time Selector Styles */
 .time-select-wrapper {
     display: flex;
