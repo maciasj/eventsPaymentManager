@@ -38,12 +38,20 @@ export const verifyUser = async (username, password) => {
             .single();
 
         if (error && error.code === 'PGRST116') return null; // Not found
-        if (error) throw error;
+        if (error) {
+            console.error('Database Error:', error);
+            alert('Error al verificar usuario: ' + error.message + ' (Code: ' + error.code + ')');
+            throw error;
+        }
 
         return data.password === password;
     } catch (error) {
-        console.warn('Supabase auth fallback:', error);
-        return await verifyLocalUser(username, password);
+        console.warn('Supabase auth failed:', error);
+        // ONLY fallback to local if it's a network error, not a permission error
+        if (error.message === 'Failed to fetch') {
+            return await verifyLocalUser(username, password);
+        }
+        return false;
     }
 };
 
