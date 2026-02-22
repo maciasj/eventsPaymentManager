@@ -9,6 +9,8 @@ import { Navigation } from './components/shared/Navigation';
 import './styles/globals.css';
 import './App.css';
 
+import { eachDayOfInterval, parseISO, format } from 'date-fns';
+
 function App() {
   const [user, setUser] = useState(() => localStorage.getItem('eventManagerUser') || null);
   const [currentView, setCurrentView] = useState('calendar');
@@ -33,7 +35,32 @@ function App() {
 
   const handleCreateEvent = async (eventData) => {
     try {
-      await addEvent(eventData);
+      if (eventData.type === 'Fira' && eventData.start_date && eventData.end_date && eventData.start_date !== eventData.end_date) {
+        const start = parseISO(eventData.start_date);
+        const end = parseISO(eventData.end_date);
+
+        try {
+          const days = eachDayOfInterval({ start, end });
+
+          // Create an event for each day sequentially
+          let dayCount = 1;
+          for (const day of days) {
+            const dateStr = format(day, 'yyyy-MM-dd');
+            await addEvent({
+              ...eventData,
+              name: `${eventData.name} (d${dayCount})`,
+              start_date: dateStr,
+              end_date: dateStr
+            });
+            dayCount++;
+          }
+        } catch (error) {
+          // If interval is invalid, create just one
+          await addEvent(eventData);
+        }
+      } else {
+        await addEvent(eventData);
+      }
     } catch (error) {
       console.error('Failed to create event:', error);
       alert('Error al crear el evento. Por favor, intenta de nuevo.');
